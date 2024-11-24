@@ -1,13 +1,13 @@
-import { defineConfig, envField } from "astro/config";
 import react from "@astrojs/react";
-import tailwind from "@astrojs/tailwind";
-import { FontaineTransform } from "fontaine";
-import vercel from "@astrojs/vercel";
-import Icons from "unplugin-icons/vite";
-import { promises as fs } from "node:fs";
-import { pascalCase } from "es-toolkit";
-import pocketbase from "astro-pocketbase";
 import sitemap from "@astrojs/sitemap";
+import tailwind from "@astrojs/tailwind";
+import vercel from "@astrojs/vercel";
+import pocketbase from "astro-pocketbase";
+import { defineConfig, envField } from "astro/config";
+import { pascalCase } from "es-toolkit";
+import { FontaineTransform } from "fontaine";
+import { promises as fs } from "node:fs";
+import Icons from "unplugin-icons/vite";
 
 // https://astro.build/config
 export default defineConfig({
@@ -16,10 +16,10 @@ export default defineConfig({
     isr: { bypassToken: process.env.VERCEL_REVALIDATE_TOKEN, exclude: ["/api/invalidate"] },
   }),
 
-  // prefetch: {
-  //   defaultStrategy: "load",
-  //   prefetchAll: true,
-  // },
+  prefetch: {
+    defaultStrategy: "load",
+    prefetchAll: true,
+  },
 
   integrations: [
     react(),
