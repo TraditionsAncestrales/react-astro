@@ -101,9 +101,6 @@ importers:
       react-hook-form:
         specifier: ^7.53.2
         version: 7.53.2(react@19.0.0-rc-2ec26bc4-20241111)
-      react-leaflet:
-        specifier: 5.0.0-rc.1
-        version: 5.0.0-rc.1(leaflet@1.9.4)(react-dom@19.0.0-rc-2ec26bc4-20241111(react@19.0.0-rc-2ec26bc4-20241111))(react@19.0.0-rc-2ec26bc4-20241111)
       resend:
         specifier: ^4.0.1
         version: 4.0.1(react-dom@19.0.0-rc-2ec26bc4-20241111(react@19.0.0-rc-2ec26bc4-20241111))(react@19.0.0-rc-2ec26bc4-20241111)
@@ -1077,13 +1074,6 @@ packages:
     peerDependencies:
       react: ^18.0 || ^19.0 || ^19.0.0-rc
       react-dom: ^18.0 || ^19.0 || ^19.0.0-rc
-
-  '@react-leaflet/core@3.0.0-rc.1':
-    resolution: {integrity: sha512-1Z9Cc49G8vN7q5uRZjUbE4p+voddW1ARrYiPOGphlcsODhKhfJLQSBN7YNxi/+IQrN5qALPVQQLiovgZKT/kyQ==}
-    peerDependencies:
-      leaflet: ^1.9.0
-      react: rc
-      react-dom: rc
 
   '@rollup/pluginutils@4.2.1':
     resolution: {integrity: sha512-iKnFXr7NkdZAIHiIWE+BX5ULi/ucVFYWD6TbAV+rZctiRTY2PL6tsIKhoIOaoskiWAkgu+VsbXgUVDNLHf+InQ==}
@@ -3507,13 +3497,6 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17 || ^18 || ^19
 
-  react-leaflet@5.0.0-rc.1:
-    resolution: {integrity: sha512-pqxGH/rgUQAUuimnIt/6xLeNAcWymM/kxPpm6v1plXMNHd41Iy6i2sYbzsrRVmspXRT0HtuxQc7jWF+FRHyhYg==}
-    peerDependencies:
-      leaflet: ^1.9.0
-      react: rc
-      react-dom: rc
-
   react-promise-suspense@0.3.4:
     resolution: {integrity: sha512-I42jl7L3Ze6kZaq+7zXWSunBa3b1on5yfvUW6Eo/3fFOj6dZ5Bqmcd264nJbTK/gn1HjjILAjSwnZbV4RpSaNQ==}
 
@@ -5332,12 +5315,6 @@ snapshots:
       react: 19.0.0-rc-2ec26bc4-20241111
       react-dom: 19.0.0-rc-2ec26bc4-20241111(react@19.0.0-rc-2ec26bc4-20241111)
       react-promise-suspense: 0.3.4
-
-  '@react-leaflet/core@3.0.0-rc.1(leaflet@1.9.4)(react-dom@19.0.0-rc-2ec26bc4-20241111(react@19.0.0-rc-2ec26bc4-20241111))(react@19.0.0-rc-2ec26bc4-20241111)':
-    dependencies:
-      leaflet: 1.9.4
-      react: 19.0.0-rc-2ec26bc4-20241111
-      react-dom: 19.0.0-rc-2ec26bc4-20241111(react@19.0.0-rc-2ec26bc4-20241111)
 
   '@rollup/pluginutils@4.2.1':
     dependencies:
@@ -8136,13 +8113,6 @@ snapshots:
   react-hook-form@7.53.2(react@19.0.0-rc-2ec26bc4-20241111):
     dependencies:
       react: 19.0.0-rc-2ec26bc4-20241111
-
-  react-leaflet@5.0.0-rc.1(leaflet@1.9.4)(react-dom@19.0.0-rc-2ec26bc4-20241111(react@19.0.0-rc-2ec26bc4-20241111))(react@19.0.0-rc-2ec26bc4-20241111):
-    dependencies:
-      '@react-leaflet/core': 3.0.0-rc.1(leaflet@1.9.4)(react-dom@19.0.0-rc-2ec26bc4-20241111(react@19.0.0-rc-2ec26bc4-20241111))(react@19.0.0-rc-2ec26bc4-20241111)
-      leaflet: 1.9.4
-      react: 19.0.0-rc-2ec26bc4-20241111
-      react-dom: 19.0.0-rc-2ec26bc4-20241111(react@19.0.0-rc-2ec26bc4-20241111)
 
   react-promise-suspense@0.3.4:
     dependencies:

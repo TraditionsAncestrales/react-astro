@@ -1,32 +1,35 @@
-import { Icon } from "leaflet";
-import "leaflet/dist/leaflet.css";
-import { MapContainer, Marker, TileLayer } from "react-leaflet";
+import { useEffect, useRef } from "react";
 
-// MAIN ************************************************************************************************************************************
+// MAIN ***********************************************************************************************************************************
 export function TheContactMap({ className }: TheContactMapProps) {
-  const center: [number, number] = [-21.142_107, 55.294_209];
+  const { lat, lng, zoom } = { lat: -21.142_107, lng: 55.294_209, zoom: 17 };
+  const mapRef = useRef<HTMLElement>(null);
 
-  const icon = new Icon({
-    iconSize: [25, 41],
-    iconAnchor: [10, 41],
-    popupAnchor: [2, -40],
-    iconUrl: "/map/icon.png",
-    iconRetinaUrl: "/map/icon2.png",
-    shadowUrl: "/map/shadow.png",
-  });
+  useEffect(() => {
+    if (!mapRef.current) return;
+    const load = async () => {
+      await import("leaflet/dist/leaflet.css");
+      const L = await import("leaflet");
 
-  return (
-    <MapContainer center={center} zoom={17} className={className}>
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
-      <Marker position={center} icon={icon}></Marker>
-    </MapContainer>
-  );
+      const map = L.map(mapRef.current!).setView([lat, lng], zoom);
+      L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
+      L.marker([lat, lng], {
+        icon: L.icon({
+          iconSize: [25, 41],
+          iconAnchor: [10, 41],
+          popupAnchor: [2, -40],
+          iconUrl: "/map/icon.png",
+          iconRetinaUrl: "/map/icon2.png",
+          shadowUrl: "/map/shadow.png",
+        }),
+      }).addTo(map);
+    };
+    load();
+  }, [mapRef]);
+
+  return <figure ref={mapRef} className={className}></figure>;
 }
 
 // TYPES *********************************************************************************************************************************
-export type TheContactMapProps = {
-  className: string;
-};
+export type SetMapOpts = { lat: number; lng: number; zoom: number };
+export type TheContactMapProps = { className: string; options?: SetMapOpts };
