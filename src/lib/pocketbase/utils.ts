@@ -8,6 +8,7 @@ import type {
   ServicesRecord,
 } from "@/lib/pocketbase/schemas";
 import { format } from "@formkit/tempo";
+import { blurhashToCssGradientString } from "@unpic/placeholder";
 import { PUBLIC_IMGIX_URL } from "astro:env/server";
 
 type Narrow<FROM, TO> = FROM extends undefined ? (TO extends Promise<unknown> ? Promise<undefined> : undefined) : TO;
@@ -16,7 +17,7 @@ export function allowUndefined<FROM, TO>(method: (defined: FROM) => TO) {
 }
 
 // EVENTS **********************************************************************************************************************************
-function strictItemFromEvent(event: EventForItem) {
+async function strictItemFromEvent(event: EventForItem) {
   const { excerpt: text, from, image, name: title, places, service, slug, to, url: href } = event;
   const features = [
     { href: hrefFromService(service), key: "Type", value: service.name },
@@ -24,20 +25,22 @@ function strictItemFromEvent(event: EventForItem) {
     { key: "Au", value: format({ date: to, format: { date: "full", time: "short" }, locale: "fr", tz: "Indian/Reunion" }) },
     { key: "Endroits", value: places.map(({ name }) => name).join(" ou ") },
   ];
-  return { features, href, image: imageFrom(image), slug, stale: to.toISOString(), text, title };
+  return { features, href, image: await imageFrom(image), slug, stale: to.toISOString(), text, title };
 }
 export const itemFromEvent = allowUndefined(strictItemFromEvent);
 
 // IMAGE ***********************************************************************************************************************************
-export function strictImageFrom({ alt, height, id, src, width }: ImageForEntry) {
-  return { alt, height, src: `${PUBLIC_IMGIX_URL}/${id}/${src}?q=50`, width };
+async function strictImageFrom({ alt, height, id, src, width }: ImageForEntry) {
+  const blurhashRes = await fetch(`${PUBLIC_IMGIX_URL}/${id}/${src}?fm=blurhash&w=50`);
+  const blurhash = await blurhashRes.text();
+  return { alt, background: blurhashToCssGradientString(blurhash), src: `${PUBLIC_IMGIX_URL}/${id}/${src}?q=50`, height, width };
 }
 export const imageFrom = allowUndefined(strictImageFrom);
 
 // KNOWLEDGE *******************************************************************************************************************************
-function strictItemFromKnowledge(knowledge: KnowledgeForItem) {
+async function strictItemFromKnowledge(knowledge: KnowledgeForItem) {
   const { image, name: title, slug, text } = knowledge;
-  return { href: hrefFromKnowledge(knowledge), image: imageFrom(image), slug, text, title };
+  return { href: hrefFromKnowledge(knowledge), image: await imageFrom(image), slug, text, title };
 }
 export const itemFromKnowledge = allowUndefined(strictItemFromKnowledge);
 
@@ -58,16 +61,16 @@ export function pathFromKnowledge(knowledge: KnowledgeForRoute) {
 }
 
 // POST ************************************************************************************************************************************
-function strictSingleFromPost(post: PostForSingle) {
+async function strictSingleFromPost(post: PostForSingle) {
   const { image, text, title } = post;
-  return { features: [], image: imageFrom(image), text, title };
+  return { features: [], image: await imageFrom(image), text, title };
 }
 export const singleFromPost = allowUndefined(strictSingleFromPost);
 
-function strictItemFromPost(post: PostForItem) {
+async function strictItemFromPost(post: PostForItem) {
   const { excerpt: text, image, slug, title } = post;
   if (!image) throw new Error(`Post ${slug} has no image`);
-  return { href: hrefFromPost(post), image: imageFrom(image), slug, text, title };
+  return { href: hrefFromPost(post), image: await imageFrom(image), slug, text, title };
 }
 export const itemFromPost = allowUndefined(strictItemFromPost);
 
@@ -85,10 +88,10 @@ export function pathFromPost(post: PostForRoute) {
 }
 
 // PRODUCT *********************************************************************************************************************************
-function strictItemFromProduct(product: ProductForItem) {
+async function strictItemFromProduct(product: ProductForItem) {
   const { excerpt: text, image, name: title, slug, url: href } = product;
   if (!image) throw new Error(`Product ${slug} has no image`);
-  return { features: featuresFromProduct(product), href, image: imageFrom(image), slug, text, title };
+  return { features: featuresFromProduct(product), href, image: await imageFrom(image), slug, text, title };
 }
 export const itemFromProduct = allowUndefined(strictItemFromProduct);
 
@@ -97,16 +100,16 @@ export function featuresFromProduct({ price }: ProductForFeatures) {
 }
 
 // SERVICES ********************************************************************************************************************************
-function strictSingleFromService(service: ServiceForSingle) {
+async function strictSingleFromService(service: ServiceForSingle) {
   const { image, name: title, text } = service;
-  return { features: featuresFromService(service), image: imageFrom(image), text, title };
+  return { features: featuresFromService(service), image: await imageFrom(image), text, title };
 }
 export const singleFromService = allowUndefined(strictSingleFromService);
 
-function strictItemFromService(service: ServiceForItem) {
+async function strictItemFromService(service: ServiceForItem) {
   const { category, excerpt: text, image, name: title, slug } = service;
   const features = featuresFromService(service);
-  return { extra: { category }, features, href: hrefFromService(service), image: imageFrom(image), slug, text, title };
+  return { extra: { category }, features, href: hrefFromService(service), image: await imageFrom(image), slug, text, title };
 }
 export const itemFromService = allowUndefined(strictItemFromService);
 

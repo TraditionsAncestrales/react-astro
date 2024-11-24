@@ -23,6 +23,7 @@
     "@radix-ui/react-slot": "^1.1.0",
     "@types/leaflet": "^1.9.14",
     "@uidotdev/usehooks": "^2.4.1",
+    "@unpic/placeholder": "^0.1.2",
     "@unpic/react": "^0.1.14",
     "astro": "5.0.0-beta.10",
     "astro-pocketbase": "^0.10.3",
