@@ -11,7 +11,7 @@ import Icons from "unplugin-icons/vite";
 
 // https://astro.build/config
 export default defineConfig({
-  url: "https://traditionsancestrales.fr",
+  url: "https://react-astro.vercel.app",
   output: "server",
   adapter: vercel({
     isr: { bypassToken: process.env.VERCEL_REVALIDATE_TOKEN, exclude: ["/api/invalidate"] },
