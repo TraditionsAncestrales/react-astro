@@ -11,7 +11,7 @@ const seo = { title: "La Boutique", description: "Retrouvez tous mes produits da
 ---
 
 <Layout {seo}>
-  <RecordsItems title="Produit" items={products} border="all" intent="light">
+  <RecordsItems client:visible title="Produit" items={products} border="all" intent="light">
     <p>Il n'y a actuellement aucun produit dans la boutique.</p>
   </RecordsItems>
 </Layout>

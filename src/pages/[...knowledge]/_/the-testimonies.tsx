@@ -2,7 +2,7 @@ import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carouse
 import { Section, type SectionProps } from "@/components/ui/section";
 import { Title } from "@/components/ui/title";
 import type { TestimoniesRecord } from "@/lib/pocketbase/schemas";
-import { type Image as ImageData } from "@/lib/pocketbase/utils";
+import type { Image as ImageData } from "@/lib/pocketbase/utils";
 import { Image } from "@unpic/react";
 import Autoplay from "embla-carousel-autoplay";
 
