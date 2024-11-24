@@ -1,0 +1,98 @@
+---
+import { PostsItem } from "@/components/posts-item";
+import { getLayout } from "@/lib/api";
+import { cn, defaultContactValues, defaultNewsletterValues, getContactMessage, getNewsletterMessage, getValuesFor } from "@/lib/utils";
+import "@/styles/globals.css";
+import "@/styles/theme.css";
+import { SEO, type Props as SEOProps } from "astro-seo";
+import { actions } from "astro:actions";
+import { ClientRouter } from "astro:transitions";
+import { TheContact } from "./the-contact";
+import { TheContactMap } from "./the-contact.map";
+import { TheFooter } from "./the-footer";
+import { TheHeader } from "./the-header";
+import { TheHero } from "./the-hero.tsx";
+import { TheNewsletter } from "./the-newsletter";
+import { TheOtherKnowledges } from "./the-other-knowledges";
+
+// DATA ************************************************************************************************************************************
+const { config, hero, isHome, isMain, organizationPost, otherKnowledges, theme } = await getLayout(
+  Astro.params.knowledge ?? "traditions-ancestrales",
+  Astro.routePattern === "/[...knowledge]",
+  { pocketbase: Astro.locals.pocketbase, cache: import.meta.env.DEV ? "1d" : undefined }
+);
+
+const newsletterState = Astro.getActionResult(actions.subscribeToNewsletter);
+const newsletterValues = await getValuesFor({ defaultValues: defaultNewsletterValues, shouldSkip: (state) => !!state?.data })(
+  Astro.request,
+  newsletterState
+);
+const newsletterMessage = getNewsletterMessage(newsletterState);
+
+const contactState = Astro.getActionResult(actions.sendMessage);
+const contactValues = await getValuesFor({ defaultValues: defaultContactValues, shouldSkip: (state) => !!state?.data })(
+  Astro.request,
+  contactState
+);
+const contactMessage = getContactMessage(contactState);
+
+// PROPS ***********************************************************************************************************************************
+const { seo } = Astro.props;
+
+// TYPES ***********************************************************************************************************************************
+type Props = { seo: SEOProps };
+export type LayoutProps = Props;
+---
+
+<!doctype html>
+<html lang="fr">
+  <head>
+    <SEO
+      titleDefault="Le site d'Océane - Traditions ancestrales"
+      titleTemplate="%s — Traditions ancestrales"
+      description="Site d'Océane Ravasini à propos des traditions ancestrales : chamanisme, rêves, reiki et tarot."
+      charset="utf8"
+      extend={{
+        link: [
+          { rel: "apple-touch-icon", sizes: "180x180", href: "/apple-touch-icon.png" },
+          { rel: "icon", type: "image/png", sizes: "32x32", href: "/favicon-32x32.png" },
+          { rel: "icon", type: "image/png", sizes: "16x16", href: "/favicon-16x16.png" },
+          { rel: "manifest", href: "/site.webmanifest" },
+          { rel: "sitemap", href: "/sitemap-index.xml" },
+          { rel: "preload", href: "/splash_JaAKBlu3Mz.avif", as: "image", crossorigin: "anonymous" },
+        ],
+        meta: [
+          { name: "viewport", content: "width=device-width, initial-scale=1" },
+          { name: "generator", content: Astro.generator },
+        ],
+      }}
+      {...seo}
+    />
+    <ClientRouter />
+  </head>
+  <body class="overflow-y-auto overflow-x-hidden antialiased" data-theme={theme}>
+    <TheHeader client:load pathname={Astro.url.pathname} className="fixed left-0 top-0 z-30 w-full" />
+    <TheHero {...hero} className={cn(isMain ? "h-screen" : "h-[50vh]")} />
+    <slot />
+    {isHome && <PostsItem post={organizationPost} border="bottom" intent="primary" />}
+    <TheOtherKnowledges knowledges={otherKnowledges} />
+    <TheNewsletter
+      client:visible
+      initState={newsletterState}
+      initMessage={newsletterMessage}
+      initValues={newsletterValues}
+      border="top"
+      intent="primary"
+    />
+    {
+      isHome ? (
+        <TheContact client:visible initState={contactState} initMessage={contactMessage} initValues={contactValues} intent="light">
+          <TheContactMap client:only="react" className="absolute inset-x-0 bottom-0 z-0 h-96 xl:left-auto xl:top-0 xl:h-auto xl:w-1/2" />
+        </TheContact>
+      ) : (
+        <PostsItem post={organizationPost} className="mb-4" />
+      )
+    }
+    <TheFooter {config} />
+  </body>
+</html>

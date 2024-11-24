@@ -1,0 +1,23 @@
+---
+import { getKnowledgeCollectionSlugPage } from "@/lib/api";
+import Layout from "@/pages/_/layout.astro";
+import { Single } from "./_/single";
+
+// PARAMS **********************************************************************************************************************************
+const { collection, slug } = Astro.params;
+if (!collection || !slug) return Astro.redirect("/404");
+
+// DATA ************************************************************************************************************************************
+const { single } = await getKnowledgeCollectionSlugPage(collection, slug, {
+  pocketbase: Astro.locals.pocketbase,
+  cache: import.meta.env.DEV ? "1d" : undefined,
+});
+if (!single) return Astro.redirect("/404");
+
+// VARS ************************************************************************************************************************************
+const seo = { title: single.title };
+---
+
+<Layout {seo}>
+  <Single {...single} />
+</Layout>
